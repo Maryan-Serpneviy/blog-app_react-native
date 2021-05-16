@@ -1,7 +1,7 @@
 import { DATA } from './data'
 
 class DataService {
-   posts: iPost[] = DATA
+   posts: IPost[] = DATA
 }
 
 export const dataService = new DataService()

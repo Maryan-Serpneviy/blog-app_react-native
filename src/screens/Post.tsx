@@ -8,15 +8,16 @@ import { dataService } from '../services/data.service'
 /* components */
 import HeaderIcon from '../components/HeaderIcon'
 
-/* styles */
+/* constants */
 import { THEME } from '../styles/theme'
+import { Screen } from '../core/constants'
 
 /* types */
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp, ParamListBase } from '@react-navigation/native'
 
 interface Props {
-   route: RouteProp<{ [ScreenEnum.Post]: { post: IPost }}, ScreenEnum.Post> 
+   route: RouteProp<{ [Screen.Post]: { post: IPost }}, Screen.Post> 
    navigation: StackNavigationProp<ParamListBase>
 }
 

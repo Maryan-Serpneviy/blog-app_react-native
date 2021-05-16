@@ -9,8 +9,8 @@ import {
 } from 'react-native'
 
 interface Props {
-   post: iPost
-   onOpen: (post: iPost) => void
+   post: IPost
+   onOpen: (post: IPost) => void
 }
 
 export const Post: FC<Props> = ({ post, onOpen })  => (

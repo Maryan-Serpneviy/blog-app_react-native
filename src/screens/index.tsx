@@ -3,6 +3,8 @@ import { Platform } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { Ionicons } from '@expo/vector-icons'
 
 /* constants */
 import { Screen } from '../core/constants'
@@ -32,9 +34,19 @@ const screenOptions = {
    headerTintColor: Platform.OS === 'android' ? 'white' : THEME.MAIN_COLOR
 }
 
+const tabNavigatorOptions = {
+   shifting: true,
+   barStyle: {
+      backgroundColor: Platform.OS == 'android' ? THEME.MAIN_COLOR : 'white'
+   },
+   tabBarOptions: {
+      activeTintColor: Platform.OS == 'android' ? 'white' : THEME.MAIN_COLOR
+   }
+}
+
 const Post = createStackNavigator()
 const Favorites = createStackNavigator()
-const Tab = createBottomTabNavigator()
+const Tab = Platform.OS == 'android' ? createMaterialBottomTabNavigator() : createBottomTabNavigator()
 
 const PostNavigator: FC = () => (
    <Post.Navigator initialRouteName={Screen.Dashboard} screenOptions={screenOptions}>
@@ -54,14 +66,20 @@ const FavoritesNavigator: FC = () => (
 
 export const RootNavigator: FC = () => (
    <NavigationContainer>
-      <Tab.Navigator>
+      <Tab.Navigator {...tabNavigatorOptions}>
          <Tab.Screen
-            name="PostNavigator"
+            name="Posts"
             component={PostNavigator}
+            options={{
+               tabBarIcon: (props: { color: string }) => <Ionicons name="ios-albums" size={25} color={props.color} />
+            }}
          />
          <Tab.Screen
-            name="FavoritesNavigator"
+            name="Favorites"
             component={FavoritesNavigator}
+            options={{
+               tabBarIcon: (props: { color: string }) => <Ionicons name="ios-star" size={25} color={props.color} />
+            }}
          />
       </Tab.Navigator>
    </NavigationContainer>
