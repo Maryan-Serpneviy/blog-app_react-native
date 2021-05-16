@@ -1,21 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { FC } from 'react'
+import { useFonts } from 'expo-font'
+import AppLoading from 'expo-app-loading'
 
-export default function App() {
+/* store */
+import { Provider } from 'mobx-react'
+import { mainStore as store } from './src/store/todos.store'
+
+import Screens from './src/screens'
+
+const App: FC = () => {
+  /* initialize fonts */
+  const [fontsLoaded] = useFonts({
+    'caviar-dreams': require('./src/assets/fonts/CaviarDreams.ttf'),
+    'caviar-dreams_bold': require('./src/assets/fonts/CaviarDreams_Bold.ttf'),
+    khand: require('./src/assets/fonts/khand.ttf')
+  })
+
+  if (!fontsLoaded) return <AppLoading />
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <Provider store={store}>
+      <Screens />
+    </Provider>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
