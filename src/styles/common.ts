@@ -5,6 +5,18 @@ const common = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center'
+   },
+})
+
+export const font = StyleSheet.create({
+   caviarDreams: {
+      fontFamily: 'caviar-dreams'
+   },
+   caviarDreamsBold: {
+      fontFamily: 'caviar-dreams_bold'
+   },
+   khand: {
+      fontFamily: 'khand'
    }
 })
 

@@ -1,9 +1,9 @@
 import { configure } from 'mobx'
-import { TodosStore } from './todos.store'
+import { PostsStore } from './posts.store'
 
 configure({ enforceActions: 'observed' })
 export class RootStore {
-   todos = new TodosStore()
+   posts = new PostsStore()
 }
 
 export const rootStore = new RootStore()

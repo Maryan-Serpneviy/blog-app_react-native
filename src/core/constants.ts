@@ -1,7 +1,7 @@
 export enum Screen {
    Dashboard = 'Dashboard',
-   Creation = 'Creation',
+   Post = 'Post',
    Favorites = 'Favorites',
-   Info = 'Info',
-   Post = 'Post'
+   Creation = 'Creation',
+   Info = 'Info'
 }

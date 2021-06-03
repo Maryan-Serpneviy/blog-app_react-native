@@ -3,10 +3,10 @@ import { useFonts } from 'expo-font'
 import AppLoading from 'expo-app-loading'
 
 /* store */
-import { Provider } from 'mobx-react'
-import { mainStore as store } from './src/store/todos.store'
+import { Provider, observer } from 'mobx-react'
+import { postsStore as store } from './src/store/posts.store'
 
-import Screens from './src/screens'
+import AppContainer from './src/navigation'
 
 const App: FC = () => {
   /* initialize fonts */
@@ -20,9 +20,9 @@ const App: FC = () => {
 
   return (
     <Provider store={store}>
-      <Screens />
+      <AppContainer />
     </Provider>
   )
 }
 
-export default App
+export default observer(App)

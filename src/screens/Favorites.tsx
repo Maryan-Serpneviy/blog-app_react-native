@@ -1,8 +1,9 @@
 import React, { FC, useEffect } from 'react'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
-/* services */
-import { dataService } from '../services/data.service'
+/* store */
+import { observer } from 'mobx-react'
+import { postsStore as store } from '../store/posts.store'
 
 /* components */
 import HeaderIcon from '../components/HeaderIcon'
@@ -12,11 +13,11 @@ import PostList from '../components/PostList'
 import { Screen } from '../core/constants'
 
 /* types */
-import { StackNavigationProp } from '@react-navigation/stack'
 import { ParamListBase } from '@react-navigation/native'
+import { DrawerNavigationProp } from '@react-navigation/drawer'
 
 interface Props {
-   navigation: StackNavigationProp<ParamListBase>
+   navigation: DrawerNavigationProp<ParamListBase>
 }
 
 export const FavoritesScreen: FC<Props> = ({ navigation }) => {
@@ -32,15 +33,14 @@ export const FavoritesScreen: FC<Props> = ({ navigation }) => {
                <Item
                   title="drawer"
                   iconName="ios-menu"
+                  onPress={navigation.toggleDrawer}
                />
             </HeaderButtons>
          )
       })
    }, [])
 
-   const posts = dataService.posts.filter(post => post.booked)
-
-   return <PostList posts={posts} onOpen={openPostHandler} />
+   return <PostList posts={store.favPosts} onOpen={openPostHandler} />
 }
 
-export default FavoritesScreen
+export default observer(FavoritesScreen)

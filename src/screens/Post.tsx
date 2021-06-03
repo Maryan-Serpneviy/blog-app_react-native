@@ -2,8 +2,8 @@ import React, { FC, useEffect } from 'react'
 import { StyleSheet, ScrollView, View, Text, Image, Button, Alert } from 'react-native'
 import { Item, HeaderButtons } from 'react-navigation-header-buttons'
 
-/* services */
-import { dataService } from '../services/data.service'
+import { observer } from 'mobx-react'
+import { postsStore as store } from '../store/posts.store'
 
 /* components */
 import HeaderIcon from '../components/HeaderIcon'
@@ -21,12 +21,11 @@ interface Props {
    navigation: StackNavigationProp<ParamListBase>
 }
 
-export const PostScreen: FC<Props> = ({ route, navigation }) => {
-   const { post } = route.params
-   const currentPost = dataService.posts.find(item => item.id === post.id)
+export const PostScreen: FC<Props> = ({ route: { params: { post }}, navigation }) => {
+   const currentPost = store.allPosts.find(postGlobal => postGlobal.id === post.id)
 
-   const iconName = post.booked ? 'ios-star' : 'ios-star-outline'
-
+   const iconName = currentPost?.booked ? 'ios-star' : 'ios-star-outline'
+   
    useEffect(() => {
       navigation.setOptions({
          title: `Post from ${new Date(post.date).toLocaleDateString()}`,
@@ -35,12 +34,12 @@ export const PostScreen: FC<Props> = ({ route, navigation }) => {
                <Item
                   title=""
                   iconName={iconName}
-
+                  onPress={() => store.toggleFavorite(currentPost?.id)}
                />
             </HeaderButtons>
          )
       })
-   }, [])
+   }, [store.favPosts])
 
    const removeHandler = () => {
       Alert.alert(
@@ -50,16 +49,20 @@ export const PostScreen: FC<Props> = ({ route, navigation }) => {
             {
                text: 'Cancel',
                style: 'cancel',
-               onPress: () => {}
             },
             {
                text: 'Delete',
                style: 'destructive',
-               onPress: () => {}
+               onPress: deletePost
             }
          ],
          { cancelable: false }
       )
+   }
+
+   const deletePost = () => {
+      navigation.navigate(Screen.Dashboard)
+      store.deletePost(currentPost?.id)
    }
 
    return (
@@ -87,4 +90,4 @@ const styles = StyleSheet.create({
    }
 })
 
-export default PostScreen
+export default observer(PostScreen)

@@ -1,8 +1,9 @@
 import React, { FC, useEffect } from 'react'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
-/* services */
-import { dataService } from '../services/data.service'
+/* store */
+import { observer } from 'mobx-react'
+import { postsStore as store } from '../store/posts.store'
 
 /* components */
 import HeaderIcon from '../components/HeaderIcon'
@@ -12,11 +13,11 @@ import PostList from '../components/PostList'
 import { Screen } from '../core/constants'
 
 /* types */
-import { StackNavigationProp } from '@react-navigation/stack'
 import { ParamListBase } from '@react-navigation/native'
+import { DrawerNavigationProp } from '@react-navigation/drawer'
 
 interface Props {
-   navigation: StackNavigationProp<ParamListBase>
+   navigation: DrawerNavigationProp<ParamListBase>
 }
 
 export const DashboardScreen: FC<Props> = ({ navigation }) => {
@@ -26,11 +27,13 @@ export const DashboardScreen: FC<Props> = ({ navigation }) => {
 
    useEffect(() => {
       navigation.setOptions({
+         headerTitle: 'Dashboard',
          headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={HeaderIcon}>
                <Item
                   title="drawer"
                   iconName="ios-menu"
+                  onPress={navigation.toggleDrawer}
                />
             </HeaderButtons>
          ),
@@ -39,13 +42,18 @@ export const DashboardScreen: FC<Props> = ({ navigation }) => {
                <Item
                   title="camera"
                   iconName="ios-camera"
+                  onPress={() => navigation.navigate(Screen.Creation)}
                />
             </HeaderButtons>
          )
       })
    }, [])
 
-   return <PostList posts={dataService.posts} onOpen={openPostHandler} />
+   useEffect(() => {
+      store.loadPosts()
+   }, [])
+
+   return <PostList posts={store.allPosts} onOpen={openPostHandler} />
 }
 
-export default DashboardScreen
+export default observer(DashboardScreen)
