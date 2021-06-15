@@ -31,7 +31,7 @@ export const TabNavigator: FC = () => (
          name={Navigator.Posts}
          component={PostsNavigator}
          options={{
-            title: Screen.Dashboard,
+            title: 'Posts',
             tabBarIcon: (props: { color: string }) => (
                <Ionicons
                   name="ios-albums"

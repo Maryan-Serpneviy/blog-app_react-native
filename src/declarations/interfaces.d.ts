@@ -9,3 +9,11 @@ declare interface IPost {
    date: string
    booked: boolean
 }
+
+declare interface IImagePickerResult {
+   type: string
+   uri: string
+   cancelled: boolean
+   width: number
+   height: number
+}

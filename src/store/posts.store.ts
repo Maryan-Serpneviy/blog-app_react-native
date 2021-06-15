@@ -29,6 +29,10 @@ export class PostsStore {
       this.allPosts = this.allPosts.filter(post => post.id !== postId)
       this.favPosts = this.favPosts.filter(post => post.id !== postId)
    }
+
+   createPost = (post: IPost) => {
+      this.allPosts.unshift(post)
+   }
 }
 
 export const postsStore = new PostsStore()
