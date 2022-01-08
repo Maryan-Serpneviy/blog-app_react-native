@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useRef } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import {
    StyleSheet,
    ScrollView,
@@ -33,7 +33,7 @@ interface Props {
 
 export const CreationScreen: FC<Props> = ({ navigation }) => {
    const [postText, setPostText] = useState<string>('')
-   const imageRef = useRef<string>()
+   const [imageUri, setImageUri] = useState<string>('')
 
    useEffect(() => {
       navigation.setOptions({
@@ -55,7 +55,7 @@ export const CreationScreen: FC<Props> = ({ navigation }) => {
          id: store.allPosts.length + 1,
          date: new Date().toJSON(),
          text: postText,
-         img: imageRef.current || '',
+         image: imageUri || '',
          booked: false
       }
       store.createPost(newPost)
@@ -63,7 +63,7 @@ export const CreationScreen: FC<Props> = ({ navigation }) => {
    }
 
    const onImagePick = (uri: string) => {
-      imageRef.current = uri
+      setImageUri(uri)
    }
 
    return (
@@ -85,7 +85,7 @@ export const CreationScreen: FC<Props> = ({ navigation }) => {
                title="Create post"
                color={THEME.MAIN_COLOR}
                onPress={createPost}
-               disabled={!postText}
+               disabled={!postText || !imageUri}
             />
          </View>
          </TouchableWithoutFeedback>

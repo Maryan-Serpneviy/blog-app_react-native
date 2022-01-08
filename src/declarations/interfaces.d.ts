@@ -4,8 +4,8 @@ declare interface IScreen {
 
 declare interface IPost {
    id: number
-   img: string
    text: string
+   image: string
    date: string
    booked: boolean
 }

@@ -1,5 +1,7 @@
 import { configure, makeAutoObservable } from 'mobx'
-import { dataService } from '../services/data.service'
+
+import { DB } from '../services/db.service'
+import { FS } from '../services/fs.service'
 
 configure({ enforceActions: 'observed' })
 export class PostsStore {
@@ -10,12 +12,28 @@ export class PostsStore {
    allPosts: IPost[] = []
    favPosts: IPost[] = []
 
-   loadPosts = (posts: IPost[] = dataService.posts) => {
-      this.allPosts = posts
-      this.favPosts = posts.filter(post => post.booked)
+   loadPosts = async () => {
+      const posts = await DB.getPosts()
+      this.allPosts = posts || []
+      this.favPosts = posts?.filter(post => post.booked)
    }
 
-   toggleFavorite = (postId?: number) => {
+   createPost = async (post: IPost) => {
+      const fileName = post.image.split('/').pop()
+      console.log('post image: ', post.image.split('/').pop())
+      console.log('posts: ', this.allPosts)
+      if (fileName) {
+         const newPath = await FS.createFile(post.image, fileName)
+         post.image = newPath
+      }
+
+      const insertId = await DB.createPost(post)
+      if (insertId) post.id = insertId
+
+      this.allPosts = [post, ...this.allPosts]
+   }
+
+   toggleFavorite = async (postId?: number) => { 
       this.allPosts = this.allPosts.map(post => {
          if (post.id === postId) {
             post.booked = !post.booked
@@ -25,13 +43,9 @@ export class PostsStore {
       this.favPosts = this.allPosts.filter(post => post.booked)
    }
 
-   deletePost = (postId?: number) => {
+   deletePost = async (postId?: number) => {
       this.allPosts = this.allPosts.filter(post => post.id !== postId)
       this.favPosts = this.favPosts.filter(post => post.id !== postId)
-   }
-
-   createPost = (post: IPost) => {
-      this.allPosts.unshift(post)
    }
 }
 
